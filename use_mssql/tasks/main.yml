@@ -1,2 +1,14 @@
 ---
 # tasks file for use_mssql
+- name: open port 1433 for remote access(Ubuntu)
+  ufw:
+    port: 1433
+    proto: tcp
+    rule: allow
+  when: ansible_distribution == 'Ubuntu'
+
+- name: install pymssql
+  pip: 
+    name: pymssql
+    state: present
+
