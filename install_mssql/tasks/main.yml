@@ -27,12 +27,17 @@
     name: mssql-server
     state: latest
 
-- name: check if already setup
-  command: grep -Fq accepteula /var/opt/mssql/mssql.conf
-  ignore_errors: yes
-  changed_when: no
-  register: is_setup
-  become: yes
+- name: stop exsisting mssql-server
+  systemd:
+    name: mssql-server
+    state: stopped
+
+#- name: check if already setup
+#  command: grep -Fq accepteula /var/opt/mssql/mssql.conf
+#  ignore_errors: yes
+#  changed_when: no
+#  register: is_setup
+#  become: yes
 
 - name: run mssql setup script
   command: /opt/mssql/bin/mssql-conf -n setup accept-eula
@@ -40,8 +45,15 @@
     MSSQL_SA_PASSWORD: LiRong11821
     MSSQL_PID: express
   become: yes
-  notify: restart_mssql
-  when: is_setup is failed
+#  notify: restart_mssql
+#  when: is_setup is failed 
+
+# - name: restart
+#  systemd:
+#    name: mssql-server
+#    state: restarted
+#    enabled: yes
+#  become: yes
 
 
 

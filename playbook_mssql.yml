@@ -1,9 +1,10 @@
 ---
 
 -
-  hosts: webservers
+  hosts: ubuntu2
 
   roles:
     - install_mssql
-
+    - install_commandlinetool
+    - use_mssql
 ...

@@ -1,7 +1,7 @@
 ---
 # handlers file for install_mssql
 - name: restart_mssql
-  service:
+  systemd:
     name: mssql-server
     state: restarted 
     enabled: yes
