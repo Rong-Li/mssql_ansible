@@ -29,3 +29,30 @@
     login_host: localhost
     login_user: SA
     login_password: LiRong11821
+
+- name: sql file from Microsoft repo
+  copy:
+    src: ~/ansible/mssql/sample_data/sample.sql
+    dest: /tmp
+
+- name: import the sql file
+  mssql_db:
+    name: ms_repo_data
+    state: import
+    target: /tmp/sample.sql
+    login_host: localhost
+    login_user: SA
+    login_password: LiRong11821
+
+
+
+
+
+
+
+
+
+
+
+
+

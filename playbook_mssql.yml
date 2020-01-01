@@ -1,7 +1,7 @@
 ---
 
 -
-  hosts: ubuntu2
+  hosts: ubuntu1
 
   roles:
     - install_mssql
