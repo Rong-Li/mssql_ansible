@@ -1,10 +1,11 @@
 ---
 
 -
-  hosts: ubuntu1
+  hosts: centos1
 
   roles:
+#     - robertdebock.mssql
     - install_mssql
-    - install_commandlinetool
-    - use_mssql
+#    - install_commandlinetool
+#    - use_mssql
 ...

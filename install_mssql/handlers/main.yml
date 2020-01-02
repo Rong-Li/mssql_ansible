@@ -1,5 +1,16 @@
 ---
 # handlers file for install_mssql
+- name: stop existing mssql-server
+  service:
+    name: mssql-server
+    state: stopped
+
+- name: run mssql setup script
+  command: /opt/mssql/bin/mssql-conf -n setup accept-eula
+  environment:
+    MSSQL_SA_PASSWORD: LiRong11821
+    MSSQL_PID: express
+
 - name: restart_mssql
   systemd:
     name: mssql-server
