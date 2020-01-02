@@ -4,55 +4,49 @@
   get_url:
     url: https://packages.microsoft.com/config/rhel/7/mssql-server-2017.repo
     dest: /etc/yum.repos.d/mssql-server.repo
+  when: ansible_distribution == 'CentOS'
+
+- name: install mssql-server repo (Ubuntu)
+  get_url:
+    url: https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list
+    dest: /etc/apt/sources.list.d/mssql-server.list
   when: ansible_distribution == 'Ubuntu'
 
 - name: add apt signing key
-  rpm_key:
-    key: https://packages.microsoft.com/keys/microsoft.asc
+  apt_key:
+    url: https://packages.microsoft.com/keys/microsoft.asc
     state: present
   when: ansible_distribution == 'Ubuntu'
 
-- name: install repo
-  yum_repository:
-    name: packages-microsoft-com-mssql-server-2017
-    state: present
-    description: Microsoft MSSQL server
-    baseurl: https://packages.microsoft.com/rhel/7/mssql-server-2017
-    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    gpgcheck: yes
-    
+- name: refresh apt-get cache for server repo (Ubuntu)
+  command: apt-get update
+  when: ansible_distribution == 'Ubuntu'
 
 - name: install mssql-server package
   package:
     name: mssql-server
     state: latest
-  environment:
-    ACCEPT_EULA: Y
-  notify:
-    - stop existing mssql-server
-    - run mssql setup script
 
-- name: start and enable mssql-server
-  service:
+- name: stop exsisting mssql-server
+  systemd:
     name: mssql-server
-    state: started
-    enabled: yes
-  environment:
-    ACCEPT_EULA: Y
+    state: stopped
 
-
-
-# - name: stop exsisting mssql-server
-#  systemd:
-#    name: mssql-server
-#    state: stopped
-
-# - name: run mssql setup script
-#  command: /opt/mssql/bin/mssql-conf -n setup accept-eula
-#  environment:
-#    MSSQL_SA_PASSWORD: LiRong11821
-#    MSSQL_PID: express
+#- name: check if already setup
+#  command: grep -Fq accepteula /var/opt/mssql/mssql.conf
+#  ignore_errors: yes
+#  changed_when: no
+#  register: is_setup
 #  become: yes
+
+- name: run mssql setup script
+  command: /opt/mssql/bin/mssql-conf -n setup accept-eula
+  environment:
+    MSSQL_SA_PASSWORD: LiRong11821
+    MSSQL_PID: express
+  become: yes
+#  notify: restart_mssql
+#  when: is_setup is failed 
 
 # - name: restart
 #  systemd:
