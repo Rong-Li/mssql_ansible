@@ -30,10 +30,29 @@
     login_user: SA
     login_password: LiRong11821
 
-- name: sql file from Microsoft repo
+- name: copy sql script to guest 
   copy:
-    src: ~/ansible/mssql/sample_data/sample.sql
+    src: ~/sample_data/sample.sql
     dest: /tmp
+
+- name: copy databse zip file to guest
+  copy:
+    src: ~/sample_data/cayenta/caysqlseed.zip
+    dest: /tmp
+
+- name: download unzip 
+  package:
+    name: unzip
+    state: latest
+
+- name: unzip database folder contains .bak file
+  unarchive:
+    src: /tmp/caysqlseed.zip
+    dest: /tmp
+    remote_src: yes
+    owner: packt
+    group: packt
+    mode: '744'
 
 - name: import the sql file
   mssql_db:
@@ -43,7 +62,7 @@
     login_host: localhost
     login_user: SA
     login_password: LiRong11821
-
+    autocommit: yes
 
 
 
