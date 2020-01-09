@@ -3,6 +3,18 @@
 -
   hosts: ubuntu3
 
+  pre_tasks:
+    - pause:
+        prompt: "Enter:"
+      register: userInput_database
+   
+    - set_fact:
+        database_which: "{{ userInput_database.user_input }}"
+
+    - debug:
+        msg: "{{ database_which }}"
+
+
   roles:
 #    - install_mssql
 #    - install_commandlinetool
