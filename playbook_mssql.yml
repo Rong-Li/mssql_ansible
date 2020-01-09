@@ -16,7 +16,7 @@
 
 
   roles:
-#    - install_mssql
-#    - install_commandlinetool
+    - install_mssql
+    - install_commandlinetool
     - use_mssql
 ...

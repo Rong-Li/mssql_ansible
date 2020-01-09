@@ -1,6 +1,7 @@
 ---
 # vars file for use_mssql
 
-1: 'caysqlseed'
-2: 'someseed'
+database:
+  - 'caysqlseed'
+  - 'someseed'
 

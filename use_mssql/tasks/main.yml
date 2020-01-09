@@ -1,9 +1,67 @@
 ---
-- name: templating sql script  
+# tasks file for use_mssql
+- name: open port 1433 for remote access(Ubuntu)
+  ufw:
+    port: 1433
+    proto: tcp
+    rule: allow
+  when: ansible_distribution == 'Ubuntu'
+
+- name: get get-pip.py
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: ~/get-pip.py
+
+- name: run get-pip.py script from control host
+  script: ~/get-pip.py  
+
+- name: instal pymssql
+  pip: 
+    name: pymssql<3.0
+
+- name: make database
+  mssql_db:
+    name: my_db
+    state: present
+    login_host: localhost
+    login_user: SA
+    login_password: LiRong11821
+
+- name: templating sql script
   template:
     src: templates/sample.sql.j2
     dest: /tmp/sample.sql
     mode: '644'
+
+- name: copy databse zip file to guest
+  copy:
+    src: ~/sample_data/cayenta/caysqlseed.zip
+    dest: /tmp
+
+- name: download unzip 
+  package:
+    name: unzip
+    state: latest
+
+- name: unzip database folder contains .bak file
+  unarchive:
+    src: /tmp/caysqlseed.zip
+    dest: /tmp
+    remote_src: yes
+    owner: packt
+    group: packt
+    mode: '744'
+
+- name: import the sql file
+  mssql_db:
+    name: ms_repo_data
+    state: import
+    target: /tmp/sample.sql
+    login_host: localhost
+    login_user: SA
+    login_password: LiRong11821
+    autocommit: yes
+
 
 
 
