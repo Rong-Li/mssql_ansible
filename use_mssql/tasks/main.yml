@@ -59,7 +59,7 @@
     target: /tmp/sample.sql
     login_host: localhost
     login_user: SA
-    login_password: LiRong11821
+    login_password: PassWord1
     autocommit: yes
 
 
