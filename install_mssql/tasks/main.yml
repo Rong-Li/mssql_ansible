@@ -1,11 +1,5 @@
 ---
 # tasks file for install_mssql
-- name: install repo
-  get_url:
-    url: https://packages.microsoft.com/config/rhel/7/mssql-server-2017.repo
-    dest: /etc/yum.repos.d/mssql-server.repo
-  when: ansible_distribution == 'CentOS'
-
 - name: install mssql-server repo (Ubuntu)
   get_url:
     url: https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list
@@ -22,10 +16,22 @@
   command: apt-get update
   when: ansible_distribution == 'Ubuntu'
 
+- name: install repo
+  yum_repository:
+    name: packages-microsoft-com-mssql-server-2017
+    state: present
+    description: Microsoft MSSQL server
+    baseurl: https://packages.microsoft.com/rhel/7/mssql-server-2017
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    gpgcheck: yes
+  when: ansible_distribution == 'CentOS'
+  
 - name: install mssql-server package
   package:
     name: mssql-server
     state: latest
+  environment:
+    ACCEPT_EULA: Y
 
 - name: stop exsisting mssql-server
   systemd:
@@ -42,7 +48,7 @@
 - name: run mssql setup script
   command: /opt/mssql/bin/mssql-conf -n setup accept-eula
   environment:
-    MSSQL_SA_PASSWORD: LiRong11821
+    MSSQL_SA_PASSWORD: PassWord1
     MSSQL_PID: express
   become: yes
 #  notify: restart_mssql

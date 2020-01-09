@@ -25,7 +25,7 @@
     state: present
     login_host: localhost
     login_user: SA
-    login_password: LiRong11821
+    login_password: PassWord1
 
 - name: templating sql script
   template:
