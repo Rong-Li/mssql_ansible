@@ -11,6 +11,9 @@
   get_url:
     url: https://bootstrap.pypa.io/get-pip.py
     dest: ~/get-pip.py
+  register: download_pip_script_result
+  until: download_pip_script_result
+  retries: 3
 
 - name: run get-pip.py script from control host
   script: ~/get-pip.py  

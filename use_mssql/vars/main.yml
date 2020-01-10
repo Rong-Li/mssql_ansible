@@ -1,7 +1,7 @@
 ---
 # vars file for use_mssql
 
-database:
-  - 'caysqlseed'
-  - 'someseed'
+# database:
+#  - 'caysqlseed'
+#  - 'someseed'
 

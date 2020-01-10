@@ -1,15 +1,17 @@
 ---
 
 -
-  hosts: ubuntu3
+  hosts: centos3
 
   pre_tasks:
     - pause:
-        prompt: "Enter:"
+        prompt: "Choose a database to install:\n-caysqlseed\n-some database\n-some database"
       register: userInput_database
    
     - set_fact:
         database_which: "{{ userInput_database.user_input }}"
+        something: something
+        cacheable: no
 
     - debug:
         msg: "{{ database_which }}"
